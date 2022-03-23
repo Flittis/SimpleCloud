@@ -31,7 +31,7 @@ app.use(cookieParser())
 
 app.all('/api/ping', (_req, res) => res.send({ response: { success: true } }))
 
-app.use(CorsMiddleware);
+app.use(CorsMiddleware)
 app.use(UserMiddleware)
 app.use('/api', CloudRouter)
 app.use('/api/auth', AuthRouter)
