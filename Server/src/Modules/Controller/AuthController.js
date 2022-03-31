@@ -53,7 +53,7 @@ let AuthController = {
 
             let SelfToken = await RefreshToken.findOne({ token: req.query.refresh_token || req.cookies.refresh_token, user: req.query.user || req.cookies.user }).exec()
 
-            if (!SelfToken || SelfToken.status != 'active') return next(new Err(401, 'Invalid token'))
+            if (!SelfToken || SelfToken.status != 'active') return next(new Err(401, 'Invalid session'))
 
             let _NewAccessToken = new AccessToken({ user: SelfToken.user, parent: SelfToken._id });
             let NewAccessToken = await _NewAccessToken.save();

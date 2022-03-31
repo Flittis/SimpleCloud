@@ -9,8 +9,8 @@ For HTTP Server, we are using `express` module
 ~#  npm i
 ~#  node src/index.js
 
-    DB Connected to mongodb://51.83.187.184:27017
-    HTTP Server started on http://localhost:3001
+    DB Connected to mongodb://127.0.0.1:27017
+    HTTP Server started on http://127.0.0.1:3001
 ```
 
 
@@ -21,7 +21,7 @@ For HTTP Server, we are using `express` module
 # API
 
 For every request, API returns JSON object with fields:
-- `time` – the time it took the server to process the request
+- `time` – the time it took the server to process the request in seconds
 - `response` – the field in which the server returns the request response
 - `error` – the object in which the error information is returned. 
 
@@ -39,7 +39,7 @@ For every request, API returns JSON object with fields:
 
 {
     time: Float,
-    response: Object || Array || String || Number
+    response: Any
 }
 ```
 

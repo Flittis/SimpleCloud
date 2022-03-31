@@ -3,6 +3,8 @@ Config.js
 node_modules
 dist
 build
+tmp
+Storage
 
 .DS_Store
 .env.local
