@@ -1,0 +1,19 @@
+@import "variables.scss";
+@import "Header.scss";
+@import "Footer.scss";
+
+.main-div{
+  form{
+    margin-top:30px;
+    display: flex;
+    justify-content: center;
+
+    .MuiOutlinedInput-notchedOutline{
+      border-color: #CCC;
+    }
+    .MuiOutlinedInput-root{
+      color:#CCC;
+    }
+  }
+
+}

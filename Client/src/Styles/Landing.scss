@@ -1,0 +1,12 @@
+@import "variables.scss";
+@import "Header.scss";
+@import "Footer.scss";
+
+.main-div{
+  text-align: center;
+  padding-top: 50px;
+  .laptop-img{
+    width: 50%;
+    padding-top: 70px;
+  }
+}

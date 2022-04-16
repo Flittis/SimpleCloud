@@ -1,10 +1,11 @@
-import './App.scss'
+
+import Landing from './Landing.jsx'
+import Registration from './Registration.jsx'
 
 function App() {
     return (
-        <div className="App">
-            
-        </div>
+        //<Landing/>
+        <Registration/>
     );
 }
 

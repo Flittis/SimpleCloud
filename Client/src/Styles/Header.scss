@@ -1,0 +1,34 @@
+.header{
+  background-color: #23242e;
+  height: 80px;
+  width: 100%;
+  padding:20px;
+
+  .logo{
+    width: 40px;
+    height: 40px;
+  }
+  .text_logo{
+    line-height: 40px;
+    margin-left: 12px;
+  }
+  .header_left{
+    display: flex;
+    justify-content: center;
+    float:left;
+  }
+  .header_right{
+    display: flex;
+    float:right;
+    .btn{
+      padding-left: 20px;
+    }
+    #auth .MuiButton-root{
+      background-color: #323442;
+    }
+    #reg .MuiButton-root{
+      background-color: #6080FF;
+    }
+  }
+
+}
