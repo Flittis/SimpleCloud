@@ -61,6 +61,11 @@ $secondary-margin: .7rem;
         transition: opacity .25s .15s;
         margin: 0 auto;
         position: relative;
+
+        &.loading {
+            opacity: 0;
+            transition: opacity 0s 0s;
+        }
     }
 
     * {

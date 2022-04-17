@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { createContext } from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
 
+import _Store from './Store/UserStore.js'
 
+export let Service = new _Store();
+export let Context = createContext({ Service });
 
 ReactDOM.render(
-	<React.StrictMode>
+	<Context.Provider value={{ Service }}>
 		<App />
-	</React.StrictMode>,
+	</Context.Provider>, 
 	document.getElementById('app')
 );

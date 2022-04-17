@@ -1,28 +1,16 @@
 import './Styles/Landing.scss'
 import Button from '@mui/material/Button'
-import cloud from './Assets/img/icloud.svg'
 import github from './Assets/img/github_logo.svg'
 import mail from './Assets/img/mail_logo.svg'
 import mockup from './Assets/img/Mockup_1.png'
 import telegram from './Assets/img/telegram_logo.svg'
+import Header from './Components/Header'
 
 function Landing() {
     return (
         <div className="Landing">
-            <div className="header">
-              <div className="header_left">
-                <img className="logo" src={cloud} alt="logo"/>
-                <h3 className="text_logo">SimpleCloud</h3>
-              </div>
-              <div class="header_right">
-                <div className="btn" id="auth">
-                  <Button variant="contained">AUTHORIZATION</Button>
-                </div>
-                <div class="btn" id="reg">
-                  <Button variant="contained">REGISTRATION</Button>
-                </div>
-              </div>
-            </div>
+            <Header isAuth={false}/>
+
             <div className="main-div">
               <h1>Keep your data and files with us. <br/>Use our free storage to store your data.</h1>
               <Button variant="contained">Join us</Button>
