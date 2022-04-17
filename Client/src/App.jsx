@@ -1,11 +1,13 @@
 
 import Landing from './Landing.jsx'
 import Registration from './Registration.jsx'
+import Authorization from './Authorization.jsx'
 
 function App() {
     return (
-        //<Landing/>
-        <Registration/>
+        <Landing/>
+        // <Registration/>
+        // <Authorization/>
     );
 }
 

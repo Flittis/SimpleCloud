@@ -1,32 +1,30 @@
-import './Styles/Landing.scss'
-import Button from '@mui/material/Button'
+import './Styles/Authorization.scss'
+import TextField from '@mui/material/TextField'
 import cloud from './Assets/img/icloud.svg'
 import github from './Assets/img/github_logo.svg'
 import mail from './Assets/img/mail_logo.svg'
-import mockup from './Assets/img/Mockup_1.png'
 import telegram from './Assets/img/telegram_logo.svg'
+import MyInput from './Components/MyInput.jsx'
+import Button from '@mui/material/Button'
 
-function Landing() {
+function Authorization() {
     return (
-        <div className="Landing">
+        <div className="Authorization">
             <div className="header">
               <div className="header_left">
                 <img className="logo" src={cloud} alt="logo"/>
                 <h3 className="text_logo">SimpleCloud</h3>
               </div>
-              <div class="header_right">
-                <div className="btn" id="auth">
-                  <Button variant="contained">AUTHORIZATION</Button>
-                </div>
-                <div class="btn" id="reg">
-                  <Button variant="contained">REGISTRATION</Button>
-                </div>
-              </div>
             </div>
             <div className="main-div">
-              <h1>Keep your data and files with us. <br/>Use our free storage to store your data.</h1>
-              <Button variant="contained">Join us</Button>
-              <img className="laptop-img" src={mockup} alt="laptop"/>
+              <h1>Authorization</h1>
+              <form>
+                <MyInput type="text" placeholder="Login">
+                </MyInput>
+                <MyInput type="password" placeholder="Password">
+                </MyInput>
+                <Button variant="outlined">LOG IN</Button>
+              </form>
             </div>
             <div className="footer">
               <div className="footer_container">
@@ -44,4 +42,4 @@ function Landing() {
     );
 }
 
-export default Landing;
+export default Authorization;

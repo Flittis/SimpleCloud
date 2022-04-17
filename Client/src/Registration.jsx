@@ -4,6 +4,8 @@ import cloud from './Assets/img/icloud.svg'
 import github from './Assets/img/github_logo.svg'
 import mail from './Assets/img/mail_logo.svg'
 import telegram from './Assets/img/telegram_logo.svg'
+import MyInput from './Components/MyInput.jsx'
+import Button from '@mui/material/Button'
 
 function Registration() {
     return (
@@ -17,9 +19,14 @@ function Registration() {
             <div className="main-div">
               <h1>Registration</h1>
               <form>
-                <TextField id="outlined-basic" label="Login" variant="outlined" />
+                <MyInput type="text" placeholder="Login">
+                </MyInput>
+                <MyInput type="password" placeholder="Password">
+                </MyInput>
+                <MyInput type="password" placeholder="Repeat password">
+                </MyInput>
+                <Button variant="outlined">REGISTER</Button>
               </form>
-
             </div>
             <div className="footer">
               <div className="footer_container">
