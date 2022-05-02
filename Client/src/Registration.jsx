@@ -44,7 +44,7 @@ function Registration() {
                 </MyInput>
                 <MyInput type="password" placeholder="Repeat password" value={repeatPassword} onChange={e => setRepeatPassword(e.target.value)}>
                 </MyInput>
-                {error.status && <p style={{color:'red'}}>{error.message}</p>}
+                {error.status && <p style={{color:'#EB645D'}}>{error.message}</p>}
                 <Button variant="outlined" onClick={register}>REGISTER</Button>
               </form>
             </div>

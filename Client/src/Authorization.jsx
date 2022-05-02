@@ -41,7 +41,7 @@ function Authorization() {
                 </MyInput>
                 <MyInput type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)}>
                 </MyInput>
-                {error.status && <p style={{color:'red'}}>{error.message}</p>}
+                {error.status && <p style={{color:'#EB645D'}}>{error.message}</p>}
                 <Button variant="outlined" onClick={login}>LOG IN</Button>
               </form>
             </div>
