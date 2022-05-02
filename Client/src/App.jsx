@@ -2,10 +2,13 @@ import React, { useContext, useEffect, useState } from 'react'
 
 import { Context } from './index.js'
 import { observer } from 'mobx-react-lite'
+import { Routes, Route, Link } from 'react-router-dom'
 
 import Landing from './Landing.jsx'
 import Header from './Components/Header.jsx'
 import Main from './Main.jsx'
+import Authorization from './Authorization.jsx'
+import Registration from './Registration.jsx'
 
 function App() {
     let [error, setError] = useState({ status: false, message: '' })
@@ -15,7 +18,7 @@ function App() {
     useEffect(() => {
         async function fetchUser() {
             await Service.checkAuth()
-                .catch(err => {            
+                .catch(err => {
                     if (!err.error) setError({ status: true, message: `Can't connect to the server` })
                 })
         }
@@ -31,11 +34,11 @@ function App() {
     return (
         <>
             <Header isAuth={Service.isAuth} user={Service.user}/>
-            {
-                Service.isAuth ?
-                <Main /> :
-                <Landing />
-            }
+            <Routes>
+              <Route path="/" element={Service.isAuth ? <Main /> : <Landing />}/>
+              <Route path="/login" element={<Authorization/>} />
+              <Route path="/register" element={<Registration/>} />
+            </Routes>
         </>
     );
 }

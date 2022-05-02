@@ -46,10 +46,36 @@ export default class Store {
             this.setUser(null);
             this.setAuth(false);
 
-            this.isOnline = true;
         } catch (e) {
             console.error(e.response?.data.error);
         }
+    }
+
+    async register(name, password) {
+      return new Promise(async (resolve, reject) => {
+        try {
+          await axios.post(Config.AUTH_URL + '/api/auth/register', { name, password },{ withCredentials: true, crossDomain: true })
+          resolve(true)
+
+        } catch (e) {
+            reject(e.response?.data?.error || 'Unknown error')
+        }
+      })
+    }
+
+    async login(name, password) {
+      return new Promise(async (resolve, reject) => {
+        try {
+          let response = await axios.post(Config.AUTH_URL + '/api/auth/login', { name, password },{ withCredentials: true, crossDomain: true })
+
+          console.log(response.data.response)
+          localStorage.setItem('token', response?.data?.response?.access_token)
+
+          resolve(true)
+        } catch (e) {
+            reject(e.response?.data?.error || 'Unknown error')
+        }
+      })
     }
 
     checkAuth() {
