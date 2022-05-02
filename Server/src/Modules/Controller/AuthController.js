@@ -30,10 +30,13 @@ let AuthController = {
     register: async (req, res, next) => {
         try {
             if (!req.query.name || !req.query.password) return next(new Err(400, 'Name or Password is not defined'));
-            if (req.query.name.length < 6) return next(new Err(400, 'Name is too short'));
+            if (req.query.name.length < 5) return next(new Err(400, 'Name is too short'));
             if (!(/^[a-z0-9_-]+$/i).test(req.query.name)) return next(new Err(400, 'Name contains inappropriate characters'));
-            if (req.query.password.length < 6) return next(new Err(400, 'Password is too short'));
+            if (req.query.password.length < 5) return next(new Err(400, 'Password is too short'));
             if (!(/^[a-z0-9_-]+$/i).test(req.query.password)) return next(new Err(400, 'Password contains inappropriate characters'));
+
+            let IsExist = await User.exists({ name: req.query.name })
+            if (IsExist?._id) return next(new Err(400, 'User with the same name already registered'));
 
             let _NewUser = new User({ name: req.query.name })
             _NewUser.setPassword(req.query.password)
