@@ -1,5 +1,7 @@
 import Err from '../Service/ErrorService.js'
 
+import mongoose from 'mongoose'
+
 import { AccessToken, RefreshToken, User } from '../Model/UserModel.js'
 import { UserData } from '../Class/UserClass.js'
 
@@ -63,6 +65,8 @@ let AuthController = {
 
             res.res({ access_token: NewAccessToken.token })
         } catch (e) {
+            if (e instanceof mongoose.CastError) return next(new Err(401, 'Invalid session'))
+
             console.error(e)
             next(e)
         }
