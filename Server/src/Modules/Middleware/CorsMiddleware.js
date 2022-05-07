@@ -12,5 +12,5 @@ export default async (req, res, next) => {
 
     if (req.method == 'OPTIONS') return res.status(204).send()
 
-    next();
+    next()
 }
