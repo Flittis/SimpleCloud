@@ -11,6 +11,7 @@ import mongoose from 'mongoose'
 
 import CloudRouter from './Modules/Router/CloudRouter.js'
 import AuthRouter from './Modules/Router/AuthRouter.js'
+import AdminRouter from './Modules/Router/AdminRouter.js'
 
 /* Middlewares */
 
@@ -24,6 +25,7 @@ let app = express()
 
 app.disable('x-powered-by')
 app.set('trust proxy', 'loopback')
+app.use(CorsMiddleware)
 app.use(express.json())
 app.use(cookieParser())
 
@@ -31,10 +33,10 @@ app.use(cookieParser())
 
 app.all('/api/ping', (_req, res) => res.send({ response: { success: true } }))
 
-app.use(CorsMiddleware)
 app.use(UserMiddleware)
 app.use('/api/cloud', CloudRouter)
 app.use('/api/auth', AuthRouter)
+app.use('/api/admin', AdminRouter)
 app.use('*', (_req, _res, next) => next(new Err(404)))
 app.use(ErrorMiddleware)
 
