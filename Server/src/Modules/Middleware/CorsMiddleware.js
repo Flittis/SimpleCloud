@@ -1,6 +1,9 @@
 import Config from "../../Config.js";
 
 export default async (req, res, next) => {
+    req.startTime = Date.now()
+    res.res = (_response, isError) => res.json({ time: (Date.now() - req.startTime) / 1000, [isError ? 'error' : 'response']: _response })
+
     let thisDomain = req.get('origin')?.replace(/(http|https)\:\/\//gi, '').split(':')[0];
 
     res.setHeader('Access-Control-Allow-Credentials', 'true')

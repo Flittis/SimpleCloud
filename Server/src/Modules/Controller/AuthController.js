@@ -56,9 +56,9 @@ let AuthController = {
             if (!req.query.refresh_token && !req.cookies.refresh_token) return next(new Err(400, 'Refresh token not defined'))
             if (!req.query.user && !req.cookies.user) return next(new Err(401, 'Invalid session'))
 
-            let SelfToken = await RefreshToken.findOne({ token: req.query.refresh_token || req.cookies.refresh_token, user: req.query.user || req.cookies.user }).exec()
+            let SelfToken = await RefreshToken.findOne({ token: req.query.refresh_token || req.cookies.refresh_token, user: req.query.user || req.cookies.user }).populate('user').exec()
 
-            if (!SelfToken || SelfToken.status != 'active') return next(new Err(401, 'Invalid session'))
+            if (!SelfToken || SelfToken.status != 'active' || !SelfToken.user?._id) return next(new Err(401, 'Invalid session'))
 
             let _NewAccessToken = new AccessToken({ user: SelfToken.user, parent: SelfToken._id })
             let NewAccessToken = await _NewAccessToken.save()

@@ -1,8 +1,6 @@
 import { AccessToken } from '../Model/UserModel.js'
 
 export default async (req, res, next) => {
-    req.startTime = Date.now()
-
     let Auth;
     
     Object.assign(req.query, req.body)
@@ -32,8 +30,6 @@ export default async (req, res, next) => {
             console.error(e)
         }
     }
-
-    res.res = (_response, isError) => res.json({ time: (Date.now() - req.startTime) / 1000, [isError ? 'error' : 'response']: _response })
 
     next()
 }
