@@ -1,0 +1,134 @@
+@import 'variables.scss';
+
+.app__content-wrapper {
+    .app__content-meta {
+        .app__meta-title {
+            color: white;
+        }
+
+        .app__meta-subtitle {
+            margin-top: $secondary-margin / 2;
+            color: var(--light-primary-color);
+        }
+    }
+
+    .app__content-data {
+        width: 100%;
+        margin-top: $default-margin;
+
+        .data__block-primary {
+            padding: $default-padding * 1.5;
+            border-radius: $border-radius * 2;
+            box-shadow: 0px 4px 8px 0px #00000040;
+        }
+
+        .data__block-secondary {
+            background: var(--third-surface-color);
+            padding: 20px;
+            box-shadow: 0px 4px 8px 0px #00000040;
+            position: relative;
+            overflow: hidden;
+
+            .block-title {
+                color: var(--light-primary-color);
+                z-index: 1;
+                position: relative;
+            }
+
+            .block-data {
+                margin-top: $secondary-margin;
+                color: var(--light-main-color);
+                z-index: 1;
+                position: relative;
+            }
+
+            .block-progress {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 0;
+                transition: height .25s;
+                background: var(--brand-color);
+                z-index: 0;
+            }
+        }
+    }
+
+    &#dashboard {
+        display: flex;
+
+        .dashboard__left {
+            flex: 7;
+            padding-right: $default-padding;
+
+            .data__block-primary {
+                width: 100%;
+                margin-top: $default-margin;
+
+                .data__block-row {
+                    width: 100%;
+                    display: flex;
+                    margin-top: $default-margin;
+
+                    .data__block-secondary {
+                        flex: 1;
+                        margin-left: $default-margin;
+                        height: 120px;
+                        
+
+                        &:first-child { margin-left: 0; }
+                    }
+                }
+            }
+        }
+
+        .dashboard__right {
+            flex: 3;
+
+            .app__content-meta .app__meta-subtitle#analytics_range {
+                position: relative;
+                cursor: pointer;
+                user-select: none;
+                color: var(--brand-color);
+
+                &:after {
+                    content: '';
+                    display: block;
+                    width: 24px;
+                    height: 24px;
+                    position: absolute;
+                    right: -24px;
+                    top: -2px;
+                    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 19 19' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5.54166 7.91666L9.49999 11.875L13.4583 7.91666H5.54166Z' fill='%236080FF'/%3E%3C/svg%3E%0A");
+                }
+            }
+
+            .app__content-data {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0 $default-padding;
+
+                .data__block-primary {
+                    margin-top: $default-margin;
+
+                    .block-icon {
+                        height: 1.5rem;
+                        width: 1.5rem;
+                        color: var(--light-primary-color);
+                    }
+
+                    .block-title {
+                        color: var(--light-primary-color);
+                        line-height: 1.5rem;
+                        margin-left: .25rem;
+                    }
+
+                    .block-data {
+                        margin-top: $default-margin;
+                    }
+                }
+            }
+        }
+    }
+}
