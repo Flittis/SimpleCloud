@@ -18,7 +18,7 @@ let CloudController = {
 
             if (req.query._id) Query._id = req.query._id
             if (req.query.name) Query.name = new RegExp(req.query.name, 'gi')
-            if (req.query.parent) Query.parent = req.query.parent
+            if (req.query.parent) Query.parent = req.query.parent == 'undefined' ? { $exists: false } : req.query.parent
             if (req.query.type) Query.type = req.query.type
             if (req.query.mimetype) Query.mimetype = req.query.mimetype
             if (req.query.createdAtDay)
@@ -30,10 +30,12 @@ let CloudController = {
             let Response = await File.find(Query, null, {
                 sort: req.query.sort || 'name',
                 user: req.user._id
-            }).exec()
+            }).populate('parent').exec()
 
             res.res(Response || [])
         } catch (e) {
+            if (e instanceof mongoose.CastError) return next(new Err(404, 'Not found'))
+
             console.error(e)
             next(e)
         }
