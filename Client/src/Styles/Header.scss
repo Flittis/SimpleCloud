@@ -1,40 +1,52 @@
-.header{
-    background-color: #23242e;
-    height: 80px;
+.header {
+    background: var(--surface-color);
+    height: 64px;
     width: 100%;
-    padding:20px;
+    padding: var(--default-padding) 1.25rem;
+    box-shadow: 0px 2px 8px 0px #00000040;
     position: fixed;
-    
-    .logo {
-        width: 40px;
-        height: 40px;
-    }
-
-    .text_logo {
-        line-height: 40px;
-        margin-left: 12px;
-    }
+    z-index: 1;
 
     .header_left {
         display: flex;
         justify-content: center;
-        float:left;
+        float: left;
+
+        &-logo {
+            display: flex;
+            justify-content: center;
+
+            .logo {
+                width: 2rem;
+                height: 2rem;
+            }
+
+            .text_logo {
+                font-size: 1.75rem;
+                line-height: 2rem;
+                margin-left: 0.5rem;
+            }
+        }
     }
 
     .header_right {
         display: flex;
-        float:right;
+        float: right;
 
         .user {
             display: flex;
             justify-content: center;
             align-items: center;
 
+            &__name {
+                font-size: 1.35rem;
+            }
+
             &__image {
                 margin-left: 1rem;
-                width: 40px;
-                height: 40px;
-                border-radius: 20px;
+                width: 2rem;
+                height: 2rem;
+                border-radius: 1rem;
                 background-color: var(--brand-color);
                 color: var(--text-main-color);
                 display: flex;
@@ -49,9 +61,9 @@
             &#auth .MuiButton-root {
                 background-color: #323442;
             }
-            
+
             &#reg .MuiButton-root {
-                background-color: #6080FF;
+                background-color: #6080ff;
             }
         }
     }

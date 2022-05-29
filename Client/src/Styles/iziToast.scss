@@ -1,0 +1,58 @@
+@import 'variables.scss';
+@import url('https://fonts.googleapis.com/css2?family=Material+Icons+Round');
+
+.iziToast-wrapper {
+    padding-top: 4.5rem;
+}
+
+.iziToast {
+    cursor: pointer !important;
+    border-radius: $border-radius;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, .5);
+    overflow: hidden;
+    padding: calc($default-padding / 4) 0;
+    padding-right: 3.5rem;
+    min-height: 32px;
+    backdrop-filter: blur(8px);
+    background: rgba(36, 47, 65, 0.9);
+
+    &.info {
+        background: rgba(26, 34, 47, 0.9);
+
+        .iziToast-icon, .iziToast-close {
+            color: $brand-color;
+        }
+        .iziToast-message {
+            color: $text-main-color;
+        }
+    }
+    &.warning {
+        background: #522523de;
+        
+        .iziToast-icon, .iziToast-close, .iziToast-message {
+            color: $warning-color;
+        }
+    }
+
+    &-body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-left: 24px !important;   
+        margin-left: 12px !important;
+    }
+
+    &-icon { font-size: 1rem !important; }
+    &-texts { margin: 0 !important; }
+    &-message {
+        font-size: 1rem !important;
+        line-height: 1.2rem !important;
+        font-family: var(--font) !important;
+        font-weight: 500 !important;
+        margin: 0 !important;
+    }
+
+    &-close {
+        background-size: .8rem;
+    }
+}

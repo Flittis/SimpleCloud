@@ -1,0 +1,161 @@
+@import 'variables.scss';
+
+.Main__sidebar {
+    padding-top: 1.25rem;
+
+    &-content {
+        .sidebar__block {
+            width: 100%;
+            display: block;
+            background: var(--surface-color);
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, .15);
+            padding: var(--default-padding);            
+            margin-top: var(--default-margin);
+
+            &.sidebar__block-create {
+                padding: var(--secondary-margin);
+
+                #fileSelect {
+                    opacity: 0;
+                    width: 0;
+                    height: 0;
+                    position: absolute;
+                }
+            }
+            
+            &.sidebar__block-search {
+                padding: 0;
+
+                .sidebar__search {
+                    --textfield-background-color: var(--surface-color);
+        
+                    .f-textfield__trailing {
+                        position: relative;
+                        top: 9px;
+                        left: 6px;
+                        margin-left: 6px;
+                    }
+                }
+            }
+
+            &.sidebar__block-sort {
+                display: flex;
+
+                .sort__title {
+                    color: var(--light-primary-color);
+                }
+
+                .sort__query {
+                    margin-left: .4rem;
+                    position: relative;
+                    cursor: pointer;
+                    user-select: none;
+                    color: var(--brand-color);
+                    transition: all .15s;
+
+                    &:hover {
+                        filter: brightness(1.2);
+                    }
+
+                    &:after {
+                        content: '';
+                        display: block;
+                        width: 24px;
+                        height: 24px;
+                        position: absolute;
+                        right: -24px;
+                        top: -2px;
+                        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 19 19' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5.54166 7.91666L9.49999 11.875L13.4583 7.91666H5.54166Z' fill='%236080FF'/%3E%3C/svg%3E%0A");
+                    }
+                }
+            }
+
+            &:first-child { margin-top: 0; }
+        
+            .block__row {
+                display: flex;
+                width: 100%;
+                align-items: center;
+                justify-content: flex-start;
+                user-select: none;
+                cursor: pointer;
+                transition: all .1s;
+                background: transparent;
+                padding: .5rem;
+                border-radius: 8px;
+        
+                &-icon {
+                    width: 1.65rem;
+                    height: 1.65rem;
+                }
+        
+                &-title {
+                    margin-left: calc($secondary-margin / 1.5);
+                    color: var(--light-primary-color);
+                }
+        
+                &:hover {
+                    filter: brightness(1.1);
+                    background: var(--third-surface-color);
+                }
+            }
+
+            .space__progress {
+                width: 100%;
+                height: 4px;
+                border-radius: 2px;
+                background: var(--third-surface-color);
+                overflow: hidden;
+
+                &-track {
+                    width: 25%;
+                    height: 100%;
+                    border-radius: 2px;
+                    background: var(--brand-color);
+                }
+            }
+
+            .space__size {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                margin-top: var(--default-margin);
+                color: var(--light-primary-color);
+            }
+        }
+    }
+}
+
+.sidebar__sort-modal {
+    width: 75px;
+    display: block;
+    background: var(--third-surface-color);
+    padding: var(--secondary-margin);
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, .15);
+    left: -.7rem;
+
+    .sidebar__sort-option {
+        margin-top: .25rem;
+        transition: all .1s;
+        cursor: pointer;
+        user-select: none;
+
+        &:hover { color: var(--brand-color); }
+        &:first-child { margin-top: 0; }
+    }
+}
+
+.sidebar__folder-modal {
+    width: 225px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: var(--third-surface-color);
+    padding: var(--secondary-margin);
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, .15);
+
+    .f-button {
+        margin-top: .5rem;
+    }
+}

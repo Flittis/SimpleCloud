@@ -1,34 +1,40 @@
-@import "variables.scss";
-@import "Header.scss";
-@import "Footer.scss";
-
+@import 'variables.scss';
+@import 'Header.scss';
+@import 'Footer.scss';
 
 .Registration {
-  width: 100%;
-  height: 100%;
-  .main-div{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     width: 100%;
     height: 100%;
 
-    form{
-      margin-top:32px;
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      align-items: center;
-    }
-    h1{
-      color:#FFF;
-    }
-    Button{
-      margin:12px;
-      border-color: #23242E;
-      color:#6080FF;
-    }
-  }
+    .main-div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
 
+        .f-textfield {
+            width: 300px;
+            margin: 0.35rem 0;
+        }
+
+        form {
+            margin-top: 32px;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #fff;
+        }
+
+        Button {
+            margin: 12px;
+            border-color: #23242e;
+            color: var(--brand-color);
+        }
+    }
 }

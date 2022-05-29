@@ -24,18 +24,18 @@ API.interceptors.response.use((config) => {
         originalRequest._isRetry = true;
 
         try {
-            const response = await axios.post(`${Config.AUTH_URL}/api/refresh`, { withCredentials: true, crossDomain: true })
+            const response = await axios.post(`${Config.AUTH_URL}/api/auth/refresh`, { withCredentials: true, crossDomain: true })
 
             localStorage.setItem('token', response.data.response.access_token);
 
             return API.request(originalRequest);
         } catch (e) {
-            console.error(e.response?.data?.error || e)
-
             if (e.response?.data?.error?.error_message === 'Invalid token' || e.response?.data?.error?.error_message === 'Refresh token not defined') Service.logout()
+
+            throw e;
         }
     } else {
-        console.error(error.response?.data?.error || error)
+        throw error;
     }
 })
 

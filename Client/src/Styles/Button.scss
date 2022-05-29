@@ -1,0 +1,52 @@
+.f-button {
+    background: var(--button-background-color, #6080FF);
+    padding: .7rem 1.3rem;
+    border-radius: var(--border-radius);
+    
+    font-family: var(--font), sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: .9rem;
+    letter-spacing: 1%;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    user-select: none;
+    
+    
+    transition: filter .15s;
+    
+    text { text-align: center; }
+    
+    .f-button__icon {
+        height: 1.25rem;
+        width: 1.25rem;
+        transition: all .2s;
+        
+        &:first-child { margin-right: .5rem; }
+        &:last-child { margin-left: .5rem; }
+        &:first-child:last-child { margin: 0; }
+    }
+    
+    &:hover:not(.f-button__disabled):not([disabled]) {
+        transition: filter .2s;
+        filter: brightness(1.15);
+    }
+    
+    &:active:not(.f-button__disabled):not([disabled]) {
+        transition: filter .1s;
+        filter: brightness(0.95);
+    }
+    
+    &.f-button__primary { --button-background-color: #6080FF; }
+    &.f-button__secondary { --button-background-color: #171C23; }
+    &.f-button__gold { --button-background-color: #FF7D00; }
+    &.f-button__red { --button-background-color: #ff0000; }
+    
+    &.f-button__disabled, &[disabled] {
+        opacity: .6;
+        cursor: default;
+    }
+}
