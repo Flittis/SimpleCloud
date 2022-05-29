@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 
 import { Context } from './index.js'
 import { observer } from 'mobx-react-lite'
-import { Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 
 import Landing from './Landing.jsx'
 import Header from './Components/Header.jsx'
@@ -23,24 +23,35 @@ function App() {
                 })
         }
 
-        fetchUser();
+        fetchUser()
     }, [Service])
 
-    if (Service.isLoading || Service.isAuth === undefined) document.querySelector('#app').classList.add('loading');
-    else document.querySelector('#app').classList.remove('loading');
+    if (Service.isLoading || Service.isAuth === undefined) document.querySelector('#app').classList.add('loading')
+    else document.querySelector('#app').classList.remove('loading')
 
     if (error?.status === true) return <h1>{error.message}</h1>
 
     return (
         <>
-            <Header isAuth={Service.isAuth} user={Service.user}/>
+            <Header isAuth={Service.isAuth} user={Service.user} />
             <Routes>
-              <Route path="/" element={Service.isAuth ? <Main /> : <Landing />}/>
-              <Route path="/login" element={<Authorization/>} />
-              <Route path="/register" element={<Registration/>} />
+                {
+                    Service.isAuth ?
+                    <>
+                        <Route path='/login' element={<Navigate to='/' replace />} />
+                        <Route path='/register' element={<Navigate to='/' replace />} />
+                        <Route path='/o/:folder' element={<Main />} /> 
+                        <Route path='*' element={<Main/>} /> 
+                    </> :
+                    <>
+                        <Route path='/' element={<Landing />} /> 
+                        <Route path='/login' element={<Authorization />} />
+                        <Route path='/register' element={<Registration />} />
+                    </>
+                }
             </Routes>
         </>
-    );
+    )
 }
 
-export default observer(App);
+export default observer(App)
