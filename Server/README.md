@@ -101,7 +101,7 @@ Example of response, when `access_token` is expired:
 }
 ```
 
-# Reference
+# User API Reference
 
 ## Login
 
@@ -177,6 +177,95 @@ Example of response, when `access_token` is expired:
 ### Request
 
 `ALL /api/auth/logout`
+
+### Response
+
+```javascript
+{
+    time: Float,
+    response: {
+        success: Boolean
+    }
+}
+```
+
+# Cloud API Reference
+
+## Get files
+
+### Request
+
+`GET /api/cloud/get`
+
+### Response
+
+```javascript
+{
+    time: Float,
+    response: [ File ]
+}
+```
+
+## Download file
+
+### Request
+
+`GET /api/cloud/download/:userID/:fileID`
+
+### Response
+
+> Returns file
+```javascript
+/*
+    HTTP/3 200 OK
+    Date: Thu, 24 Mar 2022 15:00:00 GMT
+    Status: 200 OK
+    Connection: close
+    Content-Disposition: attachment; filename="${file.name}"
+    Content-Length: ${file.size}
+    Content-Type: ${file.mimetype}
+*/
+```
+
+## Create folder
+
+### Request
+
+`POST /api/cloud/create?type=folder&name=New Folder&parent=${parent._id}`
+
+### Response
+
+```javascript
+{
+    time: Float,
+    response: {
+        success: Boolean
+    }
+}
+```
+
+## Remove file
+
+### Request
+
+`POST /api/cloud/remove?_id=${file._id}`
+
+### Response
+
+```javascript
+{
+    time: Float,
+    response: {
+        success: Boolean
+    }
+}
+```
+
+## Upload file
+
+### Request
+
+`POST /api/cloud/upload?parent=${parent._id}`
 
 ### Response
 

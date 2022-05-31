@@ -13,17 +13,17 @@ export default async (req, res, next) => {
 
             if (!ThisToken) req.authError = 'Access token invalid';
             else if (ThisToken?.status?.toLowerCase() == 'active') {
-                if (Date.now() - ThisToken.created_at > 1 * 60 * 60 * 1000) {
-                    req.authError = 'Access token expired';
+                // if (Date.now() - ThisToken.created_at > 1 * 60 * 60 * 1000) {
+                //     req.authError = 'Access token expired';
                     
-                    ThisToken.status = 'expired';
-                    ThisToken.save()
-                } else {
+                //     ThisToken.status = 'expired';
+                //     ThisToken.save()
+                // } else {
                     if (ThisToken.user?._id) {
                         req.user = ThisToken.user;
                         req.userToken = ThisToken;
                     }
-                }
+                // }
             } 
             else req.authError = 'Access token expired'
         } catch (e) {
