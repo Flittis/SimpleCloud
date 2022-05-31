@@ -27,9 +27,10 @@ let CloudController = {
                     $lte: DateService.endOfDay(req.query.createdAtDay),
                 }
 
+            Query.user = req.user._id
+
             let Response = await File.find(Query, null, {
-                sort: req.query.sort || 'name',
-                user: req.user._id
+                sort: `-type ${req.query.sort || 'name'}`
             }).populate('parent').exec()
 
             res.res(Response || [])
@@ -46,6 +47,7 @@ let CloudController = {
 
             let Response = await File.findOne({ _id: req.params.id, user: req.params.user }).exec()
             if (!Response) return next(new Err(404, 'File not found'))
+            if (Response.type === 'folder') return next(new Err(400, 'You can\'t download folder'))
             if (Response.type != 'file') return next(new Err(400, 'You can\'t download this type of file'))
 
             res.set('Content-Type', Response.mimetype)
@@ -65,8 +67,9 @@ let CloudController = {
         try {
             if (!req.user) return next(new Err(401, req.authError))
             if (!req.query.name) return next(new Err(400, 'Folder name not defined'))
+            if (req.query.type && req.query.type != 'folder') return next(new Err(400, 'You can create only folder'))
 
-            if (req.query.type && req.query.type != 'folder') return next(new Err(400, 'You can\'t create this type of file'))
+            let _Parent, Path = '';
 
             let _newFile = new File({
                 name: req.query.name,
@@ -74,7 +77,16 @@ let CloudController = {
                 user: req.user._id
             })
 
-            _newFile.path = `/${_newFile._id}`;
+            if (req.query.parent) {
+                _Parent = await File.findOne({ _id: req.query.parent }).exec().catch(e => console.error(e))
+
+                if (_Parent?.type == 'folder') { 
+                    _newFile.parent = _Parent._id
+                    Path = _Parent.path
+                }
+            }
+
+            _newFile.path = Path + `/${_newFile._id}`
 
             fs.mkdirSync(`${Config.STORAGEDIR}/${_newFile.user}/${_newFile.path}`)
             await _newFile.save()
@@ -83,6 +95,11 @@ let CloudController = {
                 success: true,
                 file: new FileData(_newFile)
             })
+
+            if (_newFile.parent) {
+                _Parent.childs.push(_newFile._id)
+                _Parent.save()
+            }
         } catch (e) {
             console.error(e)
             next(e)
@@ -95,12 +112,31 @@ let CloudController = {
             
             let Response = await File.findOne({ _id: req.query._id }).exec()
             if (!Response) return next(new Err(404, 'File not found'))
-            if (Response.type != 'file') return next(new Err(400, 'You can\'t remove this type of file'))
-            
+
             await File.deleteOne({ _id: Response._id })
-            fs.unlinkSync(`${Config.STORAGEDIR}/${Response.user}/${Response.path}`)
+
+            if (Response.type == 'file') {
+                fs.unlinkSync(`${Config.STORAGEDIR}/${Response.user}/${Response.path}`)
+            } else if (Response.type == 'folder') {
+                await File.deleteMany({ path: new RegExp(Response._id, 'gi') })
+                fs.rmSync(`${Config.STORAGEDIR}/${Response.user}/${Response.path}`, { recursive: true, force: true })
+            }
 
             res.res({ success: true })
+
+            if (Response.parent) {
+                let _Parent = await File.findOne({ _id: Response.parent }).exec().catch(e => console.error(e))
+
+                if (_Parent?.type == 'folder') { 
+                    _Parent.childs = _Parent.childs.filter(el => el.toString() != Response._id.toString())
+                    _Parent.save()
+                }
+            }
+
+            req.user.space_used = 0
+            File.find({ user: req.user._id }, 'size').exec()
+                .then(r => req.user.space_used += r.size)
+            req.user.save()
         } catch (e) {
             if (e instanceof mongoose.CastError) return next(new Err(404, 'File not found'))
             if (e.code == 'ENOENT') return next('File not exist')
@@ -114,7 +150,13 @@ let CloudController = {
             if (!req.user) return next(new Err(401, req.authError))
             if (!req?.files?.file?.mv) return next(new Err(400, 'Unable to upload file'))
 
-            let FL = req.files.file;
+            let FL = req.files.file, Path = '', _Parent;
+
+            if (FL.size > req.user.space_limit - req.user.space_used) return next(new Err(400, 'You are exceeding the available space limit'))
+
+            try {
+                FL.name = decodeURIComponent(FL.name)
+            } catch(e) {  }
 
             let _newFile = new File({ 
                 name: FL.name,
@@ -125,7 +167,16 @@ let CloudController = {
                 user: req.user._id
             })
 
-            _newFile.path = `/${_newFile._id}.${FL.name.split('.').pop()}`;
+            if (req.query.parent) {
+                _Parent = await File.findOne({ _id: req.query.parent }).exec().catch(e => console.error(e))
+
+                if (_Parent?.type == 'folder') { 
+                    _newFile.parent = _Parent._id
+                    Path = _Parent.path
+                }
+            }
+
+            _newFile.path = Path + `/${_newFile._id}.${FL.name.split('.').pop()}`
 
             FL.mv(`${Config.STORAGEDIR}/${req.user._id}${_newFile.path}`)
             await _newFile.save()
@@ -134,6 +185,14 @@ let CloudController = {
                 success: true, 
                 file: new FileData(_newFile)
             })
+
+            req.user.space_used += _newFile.size
+            req.user.save()
+
+            if (_newFile.parent) {
+                _Parent.childs.push(_newFile._id)
+                _Parent.save()
+            }
         } catch (e) {
             console.error(e)
             next(e)
