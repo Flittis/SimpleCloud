@@ -21,7 +21,7 @@ let Footer = () => {
                                 (
                                     Service.folder.parent &&
                                     <>
-                                        ( Service.folder.parent?.parent && <h5 className='footer__breadcrumb-page'>...</h5> )
+                                        { Service.folder.parent?.parent && <a><h5 className='footer__breadcrumb-page'>...</h5></a> }
                                         <Link to={`/o/${Service.folder.parent._id}`}>
                                             <h5 className='footer__breadcrumb-page'>{Service.folder.parent.name}</h5>
                                         </Link>

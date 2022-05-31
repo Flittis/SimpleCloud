@@ -108,10 +108,10 @@
                 overflow: hidden;
 
                 &-track {
-                    width: 25%;
                     height: 100%;
                     border-radius: 2px;
                     background: var(--brand-color);
+                    transition: width .15s;
                 }
             }
 

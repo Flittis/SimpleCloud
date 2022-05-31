@@ -47,6 +47,7 @@ function App() {
                         <Route path='/' element={<Landing />} /> 
                         <Route path='/login' element={<Authorization />} />
                         <Route path='/register' element={<Registration />} />
+                        <Route path='*' element={<Navigate to ='/' replace />} /> 
                     </>
                 }
             </Routes>

@@ -38,6 +38,8 @@ export default class Store {
 
     setUser(user) {
         this.user = user
+
+        if (!user.space_used) this.user.space_used = 0
     }
 
     setParent(parent) {
@@ -189,12 +191,13 @@ export default class Store {
 
                 this.uploading[file.name].status = 'success'
                 this.snackbar('File uploaded successfully', 'info', 'cloud_done')
+                this.user.space_used = (this.user.space_used || 0) + response?.data?.response?.file?.size
 
                 resolve(response?.data?.response)
 
                 this.getData()
 
-                setTimeout(() => this.uploading[file.name].hide = true, 1500)
+                setTimeout(() => this.uploading[file.name].hide = true, 3000)
             } catch (e) {
                 console.error(e)
                 this.snackbar('File upload error', 'error', 'error')
@@ -210,7 +213,7 @@ export default class Store {
             if (!data || !data.name) return reject('Folder file not defined')
 
             try {
-                let response = await API.post('/cloud/create', { name: data.name, type: 'folder' })
+                let response = await API.post('/cloud/create', { name: data.name, type: 'folder', parent: this.fetchParams.parent !== 'undefined' ? this.fetchParams.parent : undefined })
 
                 this.snackbar('Folder created successfully', 'info', 'folder')
 
@@ -235,6 +238,7 @@ export default class Store {
                 this.snackbar('File deleted successfully', 'info', 'delete')
 
                 resolve(response?.data?.response)
+                this.user.space_used -= data.size
 
                 this.getData()
             } catch (e) {

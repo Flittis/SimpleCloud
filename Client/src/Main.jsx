@@ -8,6 +8,8 @@ import './Styles/Main.scss'
 import Navigation from './Components/Main/Navigation.jsx'
 import FileBlock from './Components/Main/FileBlock.jsx'
 import { useParams } from 'react-router-dom'
+import ErrorPage from './Components/Error.jsx'
+import { Icon_CloudError } from './Assets/img/Main/index.js'
 
 let Main = () => {
     let { Service } = useContext(Context)
@@ -57,9 +59,7 @@ let Main = () => {
                                 .map(el => <FileBlock key={el._id} File={el} search={Service.search} />)
                         }
                     </div> :
-                    <row className='Content__section-error' align='center' justify='center'>
-                        <h3> Folder is empty </h3>
-                    </row>
+                    <ErrorPage err='Folder is empty' icon={Icon_CloudError} fullscreen={false} />
                 }              
             </section>
         </Navigation>

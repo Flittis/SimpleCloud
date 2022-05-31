@@ -4,6 +4,7 @@ import Icon_Search from './search.svg'
 
 import Icon_Access from './access.svg'
 import Icon_Share from './share.svg'
+import Icon_Download from './download.svg'
 import Icon_Delete_Red from './delete_red.svg'
 
 import Icon_Folder from './folder.svg'
@@ -19,6 +20,7 @@ import Icon_Book from './file_book.svg'
 import Icon_Uploading from './uploading.svg'
 import Icon_UploadingSuccess from './uploading_success.svg'
 import Icon_UploadingError from './uploading_error.svg'
+import Icon_CloudError from './cloud_error.svg'
 
 export {
     Icon_Folder,
@@ -29,6 +31,7 @@ export {
     Icon_Search,
     Icon_Access,
     Icon_Share,
+    Icon_Download,
     Icon_Delete_Red,
     Icon_Document,
     Icon_Image,
@@ -39,4 +42,5 @@ export {
     Icon_Uploading,
     Icon_UploadingSuccess,
     Icon_UploadingError,
+    Icon_CloudError,
 }

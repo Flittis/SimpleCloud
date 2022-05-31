@@ -75,7 +75,7 @@ let SortModal = ({ setSortVisible }) => {
             { 
                 Object.keys(SortNames)
                     .filter(n => n !== Service.fetchParams.sort)
-                    .map(el => <h5 className='sidebar__sort-option' onClick={e => { Service.setFetchParams({ sort: el }); setSortVisible(false) }}>{SortNames[el]}</h5>)
+                    .map(el => <h5 key={el} className='sidebar__sort-option' onClick={e => { Service.setFetchParams({ sort: el }); setSortVisible(false) }}>{SortNames[el]}</h5>)
             }
         </block>
     )
@@ -89,11 +89,14 @@ let CreateFolderModal = ({ setCreateFolderVisible }) => {
     let handleClick = (e) => {
         Service.createFolder({ name: folderName })
         setCreateFolderVisible(false)
+        setFolderName('')
     }
+
+    let handleKeyDown = (event) => event.keyCode === 13 && handleClick()
 
     return (
         <block className='sidebar__folder-modal'>
-            <Textfield value={folderName} onChange={e => setFolderName(e.target.value)} placeholder='Name' />
+            <Textfield value={folderName} onChange={e => setFolderName(e.target.value)} onKeyDown={handleKeyDown} placeholder='Name' />
             <Button icon={Icon_FolderCreate_White} onClick={handleClick} label='Create' />
         </block>
     )
