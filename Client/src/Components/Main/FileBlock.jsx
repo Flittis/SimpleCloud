@@ -68,7 +68,7 @@ let FileBlock = ({ File }) => {
             <Link to={type === 'folder' ? `/o/${_id}` : `/f/${_id}`} onContextMenu={e => { e.preventDefault(); setContextShow(!contextShow) } }>
                 <block className='content__block'>
                     {
-                        ['image/png', 'image/jpeg', 'image/webp'].includes(mimetype) ?
+                        ['image/png', 'image/jpeg', 'image/webp', 'image/gif'].includes(mimetype) ?
                             <img className='content__block-preview' src={`${Config.SERVER_URL}/api/cloud/download/${user}/${_id}`} alt={name} loading='lazy' /> :
                             <img className='content__block-icon' src={Icon} alt={type} loading='lazy' />
                     }

@@ -134,8 +134,8 @@ let CloudController = {
             }
 
             req.user.space_used = 0
-            File.find({ user: req.user._id }, 'size').exec()
-                .then(r => req.user.space_used += r.size)
+            await File.find({ user: req.user._id }, 'size').exec()
+                .then(r => r.map(r2 => req.user.space_used += r2.size))
             req.user.save()
         } catch (e) {
             if (e instanceof mongoose.CastError) return next(new Err(404, 'File not found'))
