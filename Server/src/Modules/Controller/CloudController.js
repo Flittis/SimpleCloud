@@ -41,14 +41,59 @@ let CloudController = {
             next(e)
         }
     },
+    update: async (req, res, next) => {
+        try {
+            if (!req.user) return next(new Err(401, req.authError))
+            if (!req.query._id) return next(new Err(400, `File not defined`))
+            if (!req.query.update) return next(new Err(400, `Update data not defined`))
+
+            let Response = await File.findOne({ _id: req.query._id }).exec()
+
+            if (!Response?._id) return next(new Err(400, `File not found`))
+            if (Response.parent != req.user._id) return next(new Err(403))
+
+            if (typeof req.query.update == 'string') {
+                try {
+                    let Parsed = JSON.parse(req.query.update)
+
+                    req.query.update = Parsed
+                } catch(e) {
+                    return next(new Err(404, `Invalid update data`))
+                }
+            }
+
+            let Update = {}, _Update = req.query.update;
+
+            Update.access = Response.access || {}
+
+            if (_Update.name) Update.name = _Update.name
+            if (_Update.accessType) Update.access.access_type = _Update.accessType
+            if (_Update.accessPasword) Update.access.password = _Update.accessPasword
+            
+            res.res({ success: true })
+        } catch (e) {
+            if (e instanceof mongoose.CastError) return next(new Err(404, 'Not found'))
+
+            console.error(e)
+            next(e)
+        }
+    },
     download: async (req, res, next) => {
         try {
             if (!req.params.id || !req.params.user) return next(new Err(400, 'File not defined'))
 
             let Response = await File.findOne({ _id: req.params.id, user: req.params.user }).exec()
+
             if (!Response) return next(new Err(404, 'File not found'))
             if (Response.type === 'folder') return next(new Err(400, 'You can\'t download folder'))
             if (Response.type != 'file') return next(new Err(400, 'You can\'t download this type of file'))
+            if (Response.access.type == 'private') return next(new Err(403))
+            if (Response.access.password && (!req.query.password || Response.access.password != req.query.password)) {
+                if (req.acceptHTML == true) {
+                    res.set('Content-Type', 'text/html')
+                    return res.status(403).sendFile('/Projekt_Zespolowy/Server/src/Modules/Views/PasswordValidate.html')
+                } else return next(new Err(403))
+            } 
 
             res.set('Content-Type', Response.mimetype)
             res.download(
