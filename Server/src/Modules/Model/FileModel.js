@@ -8,7 +8,7 @@ let File = mongoose.model('File', new mongoose.Schema({
     md5: { type: String },
     access: { 
         access_type: { type: String, required: true, default: 'public' },
-        pasword: { type: String, default: undefined }
+        password: { type: String, default: undefined }
     },
     size: { type: Number, required: true, default: 0 },
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

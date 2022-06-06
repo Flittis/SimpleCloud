@@ -2,7 +2,7 @@ import Config from "../../Config.js";
 
 export default async (req, res, next) => {
     req.startTime = Date.now()
-    req.acceptHTML = /text\/html;/.test(req.get('accept'))
+    req.acceptHTML = /text\/html/.test(req.get('accept'))
     
     res.res = (_response, isError) => res.json({ time: (Date.now() - req.startTime) / 1000, [isError ? 'error' : 'response']: _response })
 
