@@ -96,11 +96,19 @@ let CloudController = {
             } 
 
             res.set('Content-Type', Response.mimetype)
-            res.download(
-                `${Config.STORAGEDIR}/${Response.user}/${Response.path}`,
-                Response.name.replace(/\s+/gi, '_'),
-                (e) => (e ? next('Unable to download file') : '')
-            )
+            if (req.query.preview == 'true') {
+                res.sendFile(
+                    `${Config.STORAGEDIR}/${Response.user}/${Response.path}`,
+                    { maxAge: 12 * 60 * 60 * 1000 },
+                    (e) => (e ? next('Unable to download file') : '')
+                )
+            } else {
+                res.download(
+                    `${Config.STORAGEDIR}/${Response.user}/${Response.path}`,
+                    Response.name.replace(/\s+/gi, '_'),
+                    (e) => (e ? next('Unable to download file') : '')
+                )
+            }
         } catch (e) {
             if (e instanceof mongoose.CastError) return next(new Err(404, 'File not found'))
             
