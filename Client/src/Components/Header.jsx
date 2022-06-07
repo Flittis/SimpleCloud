@@ -1,10 +1,19 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 
+import Tippy from '@tippyjs/react/headless'
 import Button from '@mui/material/Button'
 import cloud from '../Assets/img/icloud.svg'
 
-function Header({ isAuth, user }) {
+import { Context } from '../index.js'
+import { observer } from 'mobx-react-lite'
+import { Icon_Logout } from '../Assets/img/Main'
+
+function Header() {
+    let { Service } = useContext(Context)
+
+    let [modalShow, setModalShow] = useState(false)
+
     return (
         <div className='header'>
             <div className='header_left'>
@@ -14,17 +23,24 @@ function Header({ isAuth, user }) {
                         <h4 className='text_logo'>SimpleCloud</h4>
                     </div>
                 </Link>
-
-                { isAuth && <div className='header_left-search'></div> }
             </div>
 
             <div className='header_right'>
-                {isAuth ? (
-                    <div className='user'>
-                        <h5 className='user__name'> {user?.name || 'Undefined'} </h5>
+                {Service.isAuth === true && Service.user?.name ? (
+                    <Tippy 
+                        placement='bottom-end' 
+                        interactive={true} 
+                        visible={modalShow} 
+                        onClickOutside={_ => setModalShow(false)} 
+                        render={_ => <UserModal {...{setModalShow}} /> }
+                        
+                    >
+                        <div className='user' onClick={e => setModalShow(!modalShow)}>
+                            <h5 className='user__name'> {Service.user?.name || 'Undefined'} </h5>
 
-                        <div className='user__image'> <p>{user?.name[0]}</p> </div>
-                    </div>
+                            <div className='user__image'> <p>{Service.user?.name[0]}</p> </div>
+                        </div>
+                    </Tippy>
                 ) : (
                     <>
                         <div className='btn' id='auth'>
@@ -44,4 +60,25 @@ function Header({ isAuth, user }) {
     )
 }
 
-export default Header
+let UserModal = ({ setModalShow }) => {
+    let { Service } = useContext(Context)
+
+    let handleLogout = _ => {
+        setModalShow(false); 
+        Service.logout()
+            .then(r => window.location.href = '/')
+            .catch(e => Service.snackbar('Logout error'))
+    }
+
+    return (
+        <block className='User__modal'>
+            <row className='modal__row logout' onClick={ handleLogout }>
+                <p className='modal__row-title'>Logout</p>
+                <img className='modal__row-icon' src={Icon_Logout} alt='delete'/>
+            </row>
+        </block>
+    )
+}
+
+
+export default observer(Header)

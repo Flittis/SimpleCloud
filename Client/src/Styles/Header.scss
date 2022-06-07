@@ -37,6 +37,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            user-select: none;
+            cursor: pointer;
 
             &__name {
                 font-size: 1.35rem;
@@ -66,5 +68,56 @@
                 background-color: #6080ff;
             }
         }
+    }
+}
+
+.User__modal {
+    width: 120px;
+    display: block;
+    background: var(--second-surface-color);
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, .55);
+    padding: .25rem;      
+    overflow: hidden;
+    animation: contextFade .25s cubic-bezier(.28,0,.26,1.25);
+    transform-origin: top center;
+
+    .modal__row {
+        display: flex;
+        width: 100%;
+        align-items: flex-end;
+        justify-content: flex-end;
+        user-select: none;
+        cursor: pointer;
+        transition: all .1s;
+        background: transparent;
+        padding: .35rem .5rem;
+        padding-right: 1rem;
+        border-radius: var(--border-radius);
+
+        &-icon {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+        &-title {
+            line-height: 1.05rem;
+            font-size: .9rem;
+            margin-right: calc($secondary-margin / 1.5);
+            color: var(--light-primary-color);
+        }
+
+        &:hover {
+            filter: brightness(1.1);
+            background: var(--third-surface-color);
+        }
+
+        &.logout .modal__row-title {
+            color: red;
+        }
+    }
+
+    @keyframes contextFade {
+        from { transform: scale(.75); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
     }
 }

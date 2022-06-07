@@ -1,8 +1,9 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Tippy from '@tippyjs/react/headless'
 
 import { Context } from '../../index.js'
 import { observer } from 'mobx-react-lite'
+import Dropzone from '../../Controller/Dropzone.js'
 
 import { Icon_FolderCreate, Icon_FolderCreate_White, Icon_Search, Icon_Upload } from '../../Assets/img/Main'
 import Textfield from '../Textfield.jsx'
@@ -17,10 +18,25 @@ let Sidebar = () => {
     let [sortModalVisible, setSortVisible] = useState(false)
     let [createFolderVisible, setCreateFolderVisible] = useState(false)
 
-    let handleChange = (e) => {
+    let handleChange = e => {
         setSearch(e.target.value)
         Service.setSearch(e.target.value)
     }
+    
+    let handleUpload = files => {
+        for(let i = 0; i < files.length; i++) Service.upload(files[i])
+    }
+    
+    
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(_ => {
+        let handleUpload = files => {
+            for(let i = 0; i < files.length; i++) Service.upload(files[i])
+        }
+
+        Dropzone(handleUpload)
+    }, [Service])
 
     return (
         <aside className='Main__sidebar'>
@@ -34,7 +50,7 @@ let Sidebar = () => {
                         <img className='block__row-icon' src={Icon_Upload} alt='upload'/>
                         <h5 className='block__row-title'>Upload</h5>
 
-                        <input id='fileSelect' type='file' name='file' onChange={e => Service.upload(e.target.files[0])} />
+                        <input id='fileSelect' type='file' name='file' multiple onChange={e => handleUpload(e.target.files)} />
                     </label>
                     <Tippy placement='bottom' interactive={true} visible={createFolderVisible} onClickOutside={e => setCreateFolderVisible(false)} render={attr => <CreateFolderModal {...{setCreateFolderVisible}} />}>
                         <row className='block__row' onClick={e => setCreateFolderVisible(!createFolderVisible)}>

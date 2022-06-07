@@ -1,25 +1,28 @@
 import React, { useContext, useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 
 import { Context } from './index.js'
 import { observer } from 'mobx-react-lite'
 
+import { Icon_CloudError } from './Assets/img/Main/index.js'
+
 import './Styles/Components.scss'
 import './Styles/Main.scss'
+
 import Navigation from './Components/Main/Navigation.jsx'
 import FileBlock from './Components/Main/FileBlock.jsx'
-import { useParams } from 'react-router-dom'
 import ErrorPage from './Components/Error.jsx'
-import { Icon_CloudError } from './Assets/img/Main/index.js'
+import FileOverlay from './Components/Main/FileOverlay.jsx'
 
 let Main = () => {
     let { Service } = useContext(Context)
     
-    let { folder } = useParams()
+    let { folder, file } = useParams()
     const [loading, setLoading] = useState(true)
     const [err, setErr] = useState(null)
     
     useEffect(() => {
-        setLoading(true)
+        if (!file) setLoading(true)
         Service.setFetchParams({ parent: folder || 'undefined' })
 
         async function fetchData() {
@@ -45,24 +48,29 @@ let Main = () => {
         }
 
         fetchData()
-    }, [Service, folder, Service.fetchParams.sort])
+    }, [Service, folder, file, Service.fetchParams.sort])
+
+    if (Service.isAuth === false) return window.location.href = '/'
     
     return (
-        <Navigation {...{loading, err}}>
-            <section className='Content__section'>
-                {
-                    Service.data?.length ?
-                    <div className='Content__section-content'>
-                        { 
-                            Service.data
-                                .filter(el => el.name.toLowerCase().replace(/%s/g, '').indexOf(Service.search.toLowerCase().replace(/%s/g, '')) > -1)
-                                .map(el => <FileBlock key={el._id} File={el} search={Service.search} />)
-                        }
-                    </div> :
-                    <ErrorPage err='Folder is empty' icon={Icon_CloudError} fullscreen={false} />
-                }              
-            </section>
-        </Navigation>
+        <>
+            { Service.file?._id && <FileOverlay /> }
+            <Navigation {...{loading, err}}>
+                <section className='Content__section'>
+                    {
+                        Service.data?.length ?
+                        <div className='Content__section-content'>
+                            { 
+                                Service.data
+                                    .filter(el => el.name.toLowerCase().replace(/%s/g, '').indexOf(Service.search.toLowerCase().replace(/%s/g, '')) > -1)
+                                    .map(el => <FileBlock key={el._id} File={el} search={Service.search} />)
+                            }
+                        </div> :
+                        <ErrorPage err='Folder is empty' icon={Icon_CloudError} fullscreen={false} />
+                    }              
+                </section>
+            </Navigation>
+        </>
     )
 }
 

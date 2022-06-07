@@ -9,6 +9,7 @@ import Header from './Components/Header.jsx'
 import Main from './Main.jsx'
 import Authorization from './Authorization.jsx'
 import Registration from './Registration.jsx'
+import ErrorPage from './Components/Error.jsx'
 
 function App() {
     let [error, setError] = useState({ status: false, message: '' })
@@ -29,25 +30,27 @@ function App() {
     if (Service.isLoading || Service.isAuth === undefined) document.querySelector('#app').classList.add('loading')
     else document.querySelector('#app').classList.remove('loading')
 
-    if (error?.status === true) return <h1>{error.message}</h1>
+    if (Service.isAuth === undefined) return <></>
+    if (error?.status === true) return <ErrorPage err={error.message} fullscreen={true} />
 
     return (
         <>
-            <Header isAuth={Service.isAuth} user={Service.user} />
+            <Header />
             <Routes>
                 {
-                    Service.isAuth ?
+                    Service.isAuth === true ?
                     <>
+                        <Route index element={<Main />} /> 
                         <Route path='/login' element={<Navigate to='/' replace />} />
                         <Route path='/register' element={<Navigate to='/' replace />} />
                         <Route path='/o/:folder' element={<Main />} /> 
-                        <Route path='*' element={<Main/>} /> 
+                        <Route path='*' element={<Navigate to='/' replace />} /> 
                     </> :
                     <>
-                        <Route path='/' element={<Landing />} /> 
+                        <Route index element={<Landing />} /> 
                         <Route path='/login' element={<Authorization />} />
                         <Route path='/register' element={<Registration />} />
-                        <Route path='*' element={<Navigate to ='/' replace />} /> 
+                        <Route path='*' element={<Navigate to='/' replace />} /> 
                     </>
                 }
             </Routes>

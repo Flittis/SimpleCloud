@@ -6,6 +6,7 @@ import { makeAutoObservable } from 'mobx'
 import iziToast from 'izitoast'
 
 import API from '../Controller/API.js'
+import { GenerateToken } from '../Controller/Utils.js'
 
 export default class Store {
     config = {
@@ -24,6 +25,7 @@ export default class Store {
     }
     search = ''
     folder = null
+    file = null
     data = [ ]
     uploading = { }
 
@@ -39,7 +41,7 @@ export default class Store {
     setUser(user) {
         this.user = user
 
-        if (!user.space_used) this.user.space_used = 0
+        if (!user?.space_used) this.user.space_used = 0
     }
 
     setParent(parent) {
@@ -63,6 +65,10 @@ export default class Store {
         this.folder = folder
     }
 
+    setFile(file) {
+        this.file = file
+    }
+
     setAuth(bool) {
         this.isAuth = bool
     }
@@ -71,20 +77,25 @@ export default class Store {
         this.isLoading = bool
     }
 
-    async logout() {
-        try {
-            await axios.get(Config.AUTH_URL + '/api/auth/logout', {
-                withCredentials: true,
-                crossDomain: true,
-            })
+    async logout() { 
+        return new Promise(async (resolve, reject) => {
+            try {
+                await axios.get(Config.AUTH_URL + '/api/auth/logout', {
+                    withCredentials: true,
+                    crossDomain: true,
+                })
 
-            localStorage.removeItem('token')
+                localStorage.removeItem('token')
 
-            this.setUser(null)
-            this.setAuth(false)
-        } catch (e) {
-            console.error(e.response?.data.error)
-        }
+                this.setAuth(false)
+                this.setUser({})
+
+                resolve(true)
+            } catch (e) {
+                console.error(e.response?.data.error || e)
+                reject(e.response?.data?.error || 'Unknown error')
+            }
+        })
     }
 
     async register(name, password) {
@@ -153,8 +164,8 @@ export default class Store {
                         baseURL: Config.AUTH_URL,
                     })
 
-                    this.setAuth(true)
                     this.setUser(response.data.response)
+                    this.setAuth(true)
 
                     resolve(true)
                 } catch (e) {
@@ -174,22 +185,36 @@ export default class Store {
             if (!file || !file.name) return reject('File not defined')
             if (this.uploading[file.name] && this.uploading[file.name]?.status === 'uploading') return reject('This file already uploading')
 
+            let ID = `${GenerateToken(10)}_${file.name}`
+
             try {
                 let formData = new FormData()
                 formData.append('file', file, encodeURIComponent(file.name))
 
-                this.uploading[file.name] = { status: 'uploading', name: decodeURIComponent(file.name), size: file.size, type: file.type, progress: 0 }
+                delete this.uploading[ID]
+
+                let controller = new AbortController()
+                this.uploading[ID] = {
+                    id: ID,
+                    status: 'uploading',
+                    name: decodeURIComponent(file.name),
+                    size: file.size,
+                    type: file.type,
+                    progress: 0,
+                    controller
+                }
 
                 let response = await API({
+                    signal: controller.signal,
                     method: 'POST',
                     baseURL: Config.UPLOADER_URL,
                     data: formData,
                     headers: { 'Content-Type': 'multipart/form-data' },
                     params: { parent: this.fetchParams.parent !== 'undefined' ? this.fetchParams.parent : undefined },
-                    onUploadProgress: progress => this.uploading[file.name].progress = Math.round((100 * progress.loaded) / progress.total)
+                    onUploadProgress: progress => this.uploading[ID].progress = Math.round((100 * progress.loaded) / progress.total)
                 })
 
-                this.uploading[file.name].status = 'success'
+                this.uploading[ID].status = 'success'
                 this.snackbar('File uploaded successfully', 'info', 'cloud_done')
                 this.user.space_used = (this.user.space_used || 0) + response?.data?.response?.file?.size
 
@@ -197,15 +222,26 @@ export default class Store {
 
                 this.getData()
 
-                setTimeout(() => this.uploading[file.name].hide = true, 3000)
+                setTimeout(() => this.uploading[ID].hide = true, 3000)
             } catch (e) {
+                if (e.message == 'canceled') {
+                    this.snackbar('File upload canceled', 'info', 'close')
+                    this.uploading[ID].status = 'canceled'
+                    return setTimeout(() => this.uploading[ID].hide = true, 3000)
+                } 
+
                 console.error(e)
                 this.snackbar('File upload error', 'error', 'error')
                 reject(e.response?.data?.error || 'Unknown error')
                 
-                if (this.uploading[file.name]) this.uploading[file.name].status = 'error'
+                if (this.uploading[ID]) this.uploading[ID].status = 'error'
             }
         })
+    }
+
+    cancelUpload(id) {
+        this.uploading[id].controller.abort()
+        this.uploading[id].status = 'canceled'
     }
 
     async createFolder(data) {
