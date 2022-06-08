@@ -76,7 +76,7 @@ let EditModal = ({ show }) => {
                 <span className='modal__background' onClick={tryClose}></span>
 
                 <block className='modal__block'>
-                    <h3>Room Settings</h3>
+                    <h3>File editing</h3>
                     <separator />
                     <div className='modal__block-content' onKeyDown={handleKeyDown}>
                         <row className='content__row' align='center'>

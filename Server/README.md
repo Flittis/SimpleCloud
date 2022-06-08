@@ -244,6 +244,23 @@ Example of response, when `access_token` is expired:
 }
 ```
 
+## Edit file
+
+### Request
+
+`POST /api/cloud/update?_id=${_file.id}&name=${newName}&accessType=${newAccessType}&accessPasword=${newAccessPasword}`
+
+### Response
+
+```javascript
+{
+    time: Float,
+    response: {
+        success: Boolean
+    }
+}
+```
+
 ## Remove file
 
 ### Request
