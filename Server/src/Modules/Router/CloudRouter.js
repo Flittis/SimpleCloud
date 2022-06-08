@@ -9,6 +9,7 @@ let router = new Router()
 router.get('/get', CloudController.get)
 router.get('/download/:user/:id', CloudController.download)
 router.post('/create', CloudController.create)
+router.post('/update', CloudController.update)
 router.post('/remove', CloudController.remove)
 router.post('/upload', fileUpload({
     createParentPath: true,
