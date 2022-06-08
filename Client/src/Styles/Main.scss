@@ -62,6 +62,18 @@
                     border: 1px solid var(--surface-color);
                     transition: all .25s;
                     box-shadow: 0px 10px 30px rgba(0, 0, 0, .15);
+
+                    &-icons {
+                        position: absolute;
+                        left: .25rem;
+                        bottom: .25rem;
+
+                        img {
+                            width: 1.25rem;
+                            height: 1.25rem;
+                            filter: drop-shadow(0px 10px 15px rgba(0, 0, 0, .55));
+                        }
+                    }
                     
                     &-preview {
                         max-width: 100%;
@@ -112,6 +124,43 @@
                         background: var(--background-color);
                         border: 1px solid var(--brand-color);
                         transition: all .1s;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.modal {
+    &#roomEditModal {
+        .modal__block {
+            max-width: 750px;
+            width: 100%;
+        }
+    }
+
+    .modal__block {
+        &-content {
+            .content__row {
+                margin-top: $secondary-padding;
+
+                &-title {
+                    width: 30%;
+
+                    icon {
+                        margin-left: .25rem;
+                        opacity: .65;
+                        cursor: pointer;
+                        transition: opacity .1s;
+
+                        svg {
+                            width: 1.15rem;
+                            height: 1.15rem;
+                        }
+
+                        &:hover {
+                            opacity: .9;
+                        }
                     }
                 }
             }

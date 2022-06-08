@@ -13,6 +13,7 @@ import Navigation from './Components/Main/Navigation.jsx'
 import FileBlock from './Components/Main/FileBlock.jsx'
 import ErrorPage from './Components/Error.jsx'
 import FileOverlay from './Components/Main/FileOverlay.jsx'
+import EditModal from './Components/Main/EditModal.jsx'
 
 let Main = () => {
     let { Service } = useContext(Context)
@@ -55,6 +56,8 @@ let Main = () => {
     return (
         <>
             { Service.file?._id && <FileOverlay /> }
+            { Service.isEditing && <EditModal show={true} /> }
+
             <Navigation {...{loading, err}}>
                 <section className='Content__section'>
                     {

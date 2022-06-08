@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 import { Context } from '../../index.js'
 import { observer } from 'mobx-react-lite'
 
-import { Icon_Folder, Icon_Document, Icon_Video, Icon_Image, Icon_Audio, Icon_Archive, Icon_Book, Icon_Delete_Red, Icon_Share, Icon_Download, Icon_Edit, Icon_Lock } from '../../Assets/img/Main'
+import { Icon_Folder, Icon_Document, Icon_Video, Icon_Image, Icon_Audio, Icon_Archive, Icon_Book, Icon_Delete_Red, Icon_Share, Icon_Download, Icon_Edit, Icon_Lock, Icon_Access } from '../../Assets/img/Main'
 
 let FileBlock = ({ File }) => {
     let { Service } = useContext(Context)
@@ -30,6 +30,14 @@ let FileBlock = ({ File }) => {
             .then(r => Service.setFile(r[0]))
             .catch(e => Service.snackbar(e?.error?.error_message || e?.error?.error_description || 'File open error', 'error'))
     }
+    let handleFileEdit = _ => {
+        Service.getData({ _id: _id }, false)
+            .then(r => { 
+                Service.setFile(r[0])
+                Service.setIsEditing(true)
+            })
+            .catch(e => Service.snackbar(e?.error?.error_message || e?.error?.error_description || 'File open error', 'error'))
+    }
 
     let Icon = Icon_Document
 
@@ -46,7 +54,7 @@ let FileBlock = ({ File }) => {
             interactive={true} 
             visible={contextShow} 
             onClickOutside={_ => setContextShow(false)} 
-            render={_ => <FileModal {...{_id, type, user, access, handleCopy, handleDelete}} /> }
+            render={_ => <FileModal {...{_id, type, user, access, handleCopy, handleDelete, handleFileEdit}} /> }
         >
             <Link to={type === 'folder' ? `/o/${_id}` : `#`} onClick={e => (type === 'file' && handleFileOpen())} onContextMenu={e => { e.preventDefault(); setContextShow(!contextShow) } }>
                 <block className='content__block'>
@@ -57,27 +65,34 @@ let FileBlock = ({ File }) => {
                     }
 
                     <div className='content__block-meta'>
-                        <row>
-                            {
-                                access.password &&
-                                <Tip content='File protected by password'>
-                                    <img className='meta__lock' src={Icon_Lock} alt='locked' />
-                                </Tip>
-                            }
-                            <h5 className='meta__title' title={name}>{name}</h5>
-                        </row>
+                        <h5 className='meta__title' title={name}>{name}</h5>
                         <p className='meta__size'>{ type === 'folder' ? `${childs.length} files` : formatBytes(size)}</p>
                     </div>
+
+                    <row className='content__block-icons'>
+                        {
+                            access.access_type === 'private' &&
+                            <Tip content='File is private'>
+                                <img className='meta__lock' src={Icon_Lock} alt='private' />
+                            </Tip>
+                        }
+                        {
+                            access.password &&
+                            <Tip content='File is protected by password'>
+                                <img className='meta__lock' src={Icon_Access} alt='password' />
+                            </Tip>
+                        }
+                    </row>
                 </block>
             </Link>
         </Tippy>
     )
 }
 
-let FileModal = ({ type, user, _id, access, handleDelete, handleCopy }) => {
+let FileModal = ({ type, user, _id, access, handleDelete, handleCopy, handleFileEdit }) => {
     return (
         <block className='File__context'>
-            <row className='context__row'>
+            <row className='context__row' onClick={handleFileEdit}>
                 <img className='context__row-icon' src={Icon_Edit} alt='edit'/>
                 <p className='context__row-title'>Edit</p>
             </row>

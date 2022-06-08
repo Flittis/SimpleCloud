@@ -30,6 +30,7 @@ export default class Store {
     uploading = { }
 
     isLoading = true
+    isEditing = false
     isAuth = undefined
 
     constructor() {
@@ -75,6 +76,10 @@ export default class Store {
 
     setLoading(bool) {
         this.isLoading = bool
+    }
+
+    setIsEditing(bool) {
+        this.isEditing = bool
     }
 
     async logout() { 
@@ -280,6 +285,38 @@ export default class Store {
             } catch (e) {
                 console.error(e)
                 this.snackbar('File delete error', 'error', 'error')
+                reject(e.response?.data?.error || 'Unknown error')
+            }
+        })
+    }
+
+    editFile(options) {
+        return new Promise(async (resolve, reject) => {
+            if (!options) return reject('Options not defined')
+
+            try {
+                let changes = {}
+
+                if (options.name && options.name != this.file.name) changes.name = options.name
+                if (options.privacy && options.privacy != this.file.access.access_type) changes.accessType = options.privacy
+                if (options.password != this.file.access.password) changes.accessPasword = options.password || 0
+
+                if (!Object.keys(changes).length) return
+
+                let response = await API.post('/cloud/update', { _id: this.file._id, update: changes })
+
+                this.snackbar('File edited successfully', 'info', 'mode_edit')
+                this.setIsEditing(false)
+
+                resolve(response?.data?.response)
+
+                this.getData()
+                this.getData({ _id: this.file._id }, false)
+                    .then(r => this.setFile(r[0]))
+                    .catch(e => this.snackbar(e?.error?.error_message || e?.error?.error_description || 'File open error', 'error'))
+            } catch (e) {
+                console.error(e)
+                this.snackbar('File edit error', 'error', 'error')
                 reject(e.response?.data?.error || 'Unknown error')
             }
         })

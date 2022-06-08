@@ -7,7 +7,7 @@ import Tip from '@tippyjs/react'
 import { Context } from '../../index.js'
 import { observer } from 'mobx-react-lite'
 
-import { Icon_Lock, Icon_Delete_Red, Icon_Edit, Icon_Document, Icon_Video, Icon_Image, Icon_Audio, Icon_Archive, Icon_Book, Icon_Download, Icon_Share } from '../../Assets/img/Main/index.js'
+import { Icon_Lock, Icon_Delete_Red, Icon_Edit, Icon_Document, Icon_Video, Icon_Image, Icon_Audio, Icon_Archive, Icon_Book, Icon_Download, Icon_Share, Icon_Access } from '../../Assets/img/Main/index.js'
 
 let FileOverlay = () => {
     let { Service } = useContext(Context)
@@ -20,6 +20,7 @@ let FileOverlay = () => {
             .catch(e => Service.snackbar('Unable to copy link to clipboard', 'error'))
     }
     let handleDelete = _ => Service.delete(Service.file).then(r => Service.setFile(null))
+    let handleFileEdit = _ => Service.setIsEditing(true)
 
     let Icon = Icon_Document
 
@@ -54,9 +55,15 @@ let FileOverlay = () => {
                     <column>
                         <row>
                             {
+                                access.access_type === 'private' &&
+                                <Tip content='File is private'>
+                                    <img className='content__top-lock' src={Icon_Lock} alt='private' />
+                                </Tip>
+                            }
+                            {
                                 access.password &&
-                                <Tip content='File protected by password'>
-                                    <img className='content__top-lock' src={Icon_Lock} alt='locked' />
+                                <Tip content='File is protected by password'>
+                                    <img className='content__top-lock' src={Icon_Access} alt='password' />
                                 </Tip>
                             }
                             <h4 className='content__top-title'>{name}</h4>
@@ -66,7 +73,7 @@ let FileOverlay = () => {
 
                     <row className='content__top-actions'>
                         <Tip content='Edit' placement='bottom'>
-                            <div className='content__action'>
+                            <div className='content__action' onClick={handleFileEdit}>
                                 <img src={Icon_Edit} className='content__action-image' alt='edit' />
                             </div>
                         </Tip>

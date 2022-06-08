@@ -4,6 +4,7 @@ import Icon_Search from './search.svg'
 import Icon_Edit from './icon_edit.svg'
 import Icon_Lock from './icon_lock.svg'
 import Icon_Cross from './cross.svg'
+import Icon_Question from './icon_question.svg'
 
 import Icon_Access from './access.svg'
 import Icon_Share from './share.svg'
@@ -51,4 +52,5 @@ export {
     Icon_Logout,
     Icon_Lock,
     Icon_Cross,
+    Icon_Question,
 }
