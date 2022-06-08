@@ -50,7 +50,7 @@ let CloudController = {
             let Response = await File.findOne({ _id: req.query._id }).exec()
 
             if (!Response?._id) return next(new Err(400, `File not found`))
-            if (Response.parent != req.user._id) return next(new Err(403))
+            if (Response.user.toString() != req.user._id.toString()) return next(new Err(403))
 
             if (typeof req.query.update == 'string') {
                 try {
@@ -62,13 +62,14 @@ let CloudController = {
                 }
             }
 
-            let Update = {}, _Update = req.query.update;
+            let _Update = req.query.update;
 
-            Update.access = Response.access || {}
+            if (_Update.name) Response.name = _Update.name
+            if (_Update.accessType) Response.access.access_type = _Update.accessType
+            if (_Update.accessPasword) Response.access.password = _Update.accessPasword
+            else if(_Update.accessPasword === 0) Response.access.password = undefined
 
-            if (_Update.name) Update.name = _Update.name
-            if (_Update.accessType) Update.access.access_type = _Update.accessType
-            if (_Update.accessPasword) Update.access.password = _Update.accessPasword
+            await Response.save()
             
             res.res({ success: true })
         } catch (e) {
