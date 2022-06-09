@@ -60,7 +60,7 @@ let FileBlock = ({ File }) => {
                 <block className='content__block'>
                     {
                         ['image/png', 'image/jpeg', 'image/webp', 'image/gif'].includes(mimetype) ?
-                            <img className='content__block-preview' src={`${Config.SERVER_URL}/api/cloud/download/${user}/${_id}?preview=true`} alt={name} loading='lazy' /> :
+                            <img className='content__block-preview' src={`${Config.SERVER_URL}/api/cloud/download/${user}/${_id}?preview=true${access.password ? '&password=' + access.password : ''}`} alt={name} loading='lazy' /> :
                             <img className='content__block-icon' src={Icon} alt={type} loading='lazy' />
                     }
 

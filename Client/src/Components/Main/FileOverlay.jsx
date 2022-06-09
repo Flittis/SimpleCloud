@@ -38,13 +38,13 @@ let FileOverlay = () => {
     )
 
     if (['image/png', 'image/jpeg', 'image/webp', 'image/gif'].includes(mimetype)) 
-        Preview = <img className='content__preview-preview' src={`${Config.SERVER_URL}/api/cloud/download/${user}/${_id}?preview=true`} alt={name} loading='lazy' />
+        Preview = <img className='content__preview-preview' src={`${Config.SERVER_URL}/api/cloud/download/${user}/${_id}?preview=true${access.password ? '&password=' + access.password : ''}`} alt={name} loading='lazy' />
     else if (['video/mp4', 'video/webm'].includes(mimetype))
-        Preview = <video className='content__preview-preview' src={`${Config.SERVER_URL}/api/cloud/download/${user}/${_id}?preview=true`} controls />
+        Preview = <video className='content__preview-preview' src={`${Config.SERVER_URL}/api/cloud/download/${user}/${_id}?preview=true${access.password ? '&password=' + access.password : ''}`} controls />
     else if (['application/pdf'].includes(mimetype))
-        Preview = <iframe className='content__preview-preview' src={`${Config.SERVER_URL}/api/cloud/download/${user}/${_id}?preview=true`} title='PDF' />
+        Preview = <iframe className='content__preview-preview' src={`${Config.SERVER_URL}/api/cloud/download/${user}/${_id}?preview=true${access.password ? '&password=' + access.password : ''}`} title='PDF' />
     else if (['audio/mpeg', 'audio/ogg'].includes(mimetype))
-        Preview = <audio className='content__preview-preview' src={`${Config.SERVER_URL}/api/cloud/download/${user}/${_id}?preview=true`} type={mimetype} controls />
+        Preview = <audio className='content__preview-preview' src={`${Config.SERVER_URL}/api/cloud/download/${user}/${_id}?preview=true${access.password ? '&password=' + access.password : ''}`} type={mimetype} controls />
 
     return (
         <div className='File__overlay'>

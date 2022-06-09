@@ -55,7 +55,7 @@ let Main = () => {
     
     return (
         <>
-            { Service.file?._id && <FileOverlay /> }
+            { Service.file?._id && Service.file?.type === 'file' && <FileOverlay /> }
             { Service.isEditing && <EditModal show={true} /> }
 
             <Navigation {...{loading, err}}>
