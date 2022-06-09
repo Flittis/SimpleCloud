@@ -36,15 +36,15 @@ and `Server` folder
 * Start `Server` script
 
 ```
-~# cd Server
-~# node src/index.js
+~#  cd Server
+~#  node src/index.js
 ```
 
 For convenient management and monitoring of the script, you can use the [**PM2**](https://pm2.io/) process manager.
 
 ```
-~# cd Server
-~# pm2 start src/index.js --name SimpleCloud_Server
+~#  cd Server
+~#  pm2 start src/index.js --name SimpleCloud_Server
 ```
 
 You can learn more about the functionality of the package manager, learn how to configure autorun, view logs, etc. in the official [**documentation**](https://pm2.keymetrics.io/docs/usage/pm2-doc-single-page/).
@@ -52,8 +52,8 @@ You can learn more about the functionality of the package manager, learn how to 
 * Building `Client`
 
 ```
-~# cd Client
-~# npm run build
+~#  cd Client
+~#  npm run build
 ```
 
 Deployed project will be avaliable in `Client/build` folder
