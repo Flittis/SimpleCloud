@@ -45,6 +45,8 @@ let FileOverlay = () => {
         Preview = <iframe className='content__preview-preview' src={`${Config.SERVER_URL}/api/cloud/download/${user}/${_id}?preview=true${access.password ? '&password=' + access.password : ''}`} title='PDF' />
     else if (['audio/mpeg', 'audio/ogg'].includes(mimetype))
         Preview = <audio className='content__preview-preview' src={`${Config.SERVER_URL}/api/cloud/download/${user}/${_id}?preview=true${access.password ? '&password=' + access.password : ''}`} type={mimetype} controls />
+    else if (['application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'].includes(mimetype))
+        Preview = <iframe className='content__preview-preview' src={'https://view.officeapps.live.com/op/embed.aspx?src=' + encodeURIComponent(`${Config.SERVER_URL}/api/cloud/download/${user}/${_id}?preview=true${access.password ? '&password=' + access.password : ''}`)} title='Viewer' />
 
     return (
         <div className='File__overlay'>
