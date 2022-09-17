@@ -9,7 +9,7 @@ let UserSchema = new mongoose.Schema({
     role: { type: String, required: true, default: 'User' },                            // User role (User, Admin)
     password: { type: String, required: true },                                         // Password
     created_at: { type: Date, required: true, default: Date.now },                      // User creation date
-    space_limit: { type: Number, required: true, default: 5 * 1024 * 1024 * 1024 },     // Total size of files limit
+    space_limit: { type: Number, required: true, default: 1 * 1024 * 1024 * 1024 },     // Total size of files limit
     space_used: { type: Number, required: true, default: 0 },
     salt: { type: String, required: true }
 });
